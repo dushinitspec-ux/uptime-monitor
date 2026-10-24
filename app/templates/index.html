@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Network status</title>
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <!-- Without JavaScript (or if the CDN is blocked) the page still refreshes itself. -->
+  <noscript><meta http-equiv="refresh" content="30"></noscript>
+  <style>
+    :root {
+      --bg: #f6f7f9; --card: #ffffff; --text: #1d2330; --muted: #677085; --line: #e3e6ec;
+      --up: #1a9f5b; --down: #d63a3a; --partial: #e2a21b; --none: #d5d9e0; --row-down: #fdf1f1;
+      --mono: ui-monospace, "SF Mono", Consolas, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #11141a; --card: #191d25; --text: #e6e9ef; --muted: #8f97a8; --line: #2a303b;
+        --none: #343a46; --row-down: #2a1b1d;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    main { max-width: 1100px; margin: 0 auto; padding: 32px 16px 48px; }
+    header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px 20px; margin-bottom: 20px; }
+    h1 { font-size: 22px; margin: 0; }
+    h2 { font-size: 16px; margin: 32px 0 10px; }
+    .summary { font-weight: 600; padding: 4px 12px; border-radius: 999px; color: #fff; background: var(--up); }
+    .summary.bad { background: var(--down); }
+    .meta { color: var(--muted); font-size: 13px; }
+    .badge { font-size: 12px; padding: 2px 8px; border-radius: 6px; border: 1px solid var(--line); color: var(--muted); }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: middle; }
+    th { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+    tr:last-child td { border-bottom: 0; }
+    tr.down td { background: var(--row-down); }
+    .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .name { font-weight: 600; }
+    .sub { color: var(--muted); font-size: 12px; font-family: var(--mono); }
+    .problem { color: var(--down); font-size: 13px; }
+    .status { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; white-space: nowrap; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--none); }
+    .status.up .dot { background: var(--up); }
+    .status.down { color: var(--down); }
+    .status.down .dot { background: var(--down); box-shadow: 0 0 0 4px color-mix(in srgb, var(--down) 25%, transparent); }
+    .bars { display: flex; gap: 2px; height: 22px; align-items: stretch; }
+    .bars span { width: 5px; border-radius: 2px; background: var(--none); }
+    .bars .up { background: var(--up); }
+    .bars .partial { background: var(--partial); }
+    .bars .down { background: var(--down); }
+    .incidents td { font-size: 14px; }
+    .empty { padding: 18px; color: var(--muted); }
+    @media (max-width: 720px) {
+      .hide-sm { display: none; }
+      th, td { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    {% include "_status.html" %}
+  </main>
+</body>
+</html>

@@ -1,0 +1,35 @@
+# Fake devices for DEMO_MODE=true. Nothing is really pinged: the addresses are from the
+# documentation range 192.0.2.0/24, and the results are simulated (cameras and Wi-Fi fail
+# more often than the rest).
+
+devices:
+  - name: Core router
+    ip: 192.0.2.1
+    ports: [443]
+
+  - name: Firewall
+    ip: 192.0.2.2
+    ports: [443]
+
+  - name: Lobby camera
+    ip: 192.0.2.20
+    ports: [554]
+
+  - name: Parking camera
+    ip: 192.0.2.21
+    ports: [554]
+
+  - name: Pool camera
+    ip: 192.0.2.22
+    ports: [554]
+
+  - name: Wi-Fi access point, lobby
+    ip: 192.0.2.30
+
+  - name: Wi-Fi access point, floor 2
+    ip: 192.0.2.31
+
+  - name: Reception printer
+    ip: 192.0.2.40
+    ping: false
+    ports: [9100]

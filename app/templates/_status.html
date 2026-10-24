@@ -1,0 +1,79 @@
+<div id="status" hx-get="/partials/status" hx-trigger="every 10s" hx-swap="outerHTML">
+  <header>
+    <h1>Network status</h1>
+    {% if down %}
+      <span class="summary bad">{{ down }} of {{ total }} down</span>
+    {% else %}
+      <span class="summary">{{ up }} of {{ total }} up</span>
+    {% endif %}
+    {% if demo %}<span class="badge">demo mode: simulated devices</span>{% endif %}
+    <span class="meta">Updated {{ updated }}</span>
+  </header>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Device</th>
+          <th>Status</th>
+          <th class="hide-sm">Last 24 hours</th>
+          <th class="num">24 h</th>
+          <th class="num">7 days</th>
+          <th class="num hide-sm">Latency</th>
+          <th class="num hide-sm">Checked</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr class="{{ row.status.value }}">
+          <td>
+            <div class="name">{{ row.name }}</div>
+            <div class="sub">{{ row.ip }} · {{ row.checks }}</div>
+            {% if row.problems %}<div class="problem">{{ row.problems }}</div>{% endif %}
+          </td>
+          <td>
+            <span class="status {{ row.status.value }}"><span class="dot"></span>{{ row.status.value | upper }}</span>
+            {% if row.down_for %}<div class="sub">for {{ row.down_for }}</div>{% endif %}
+          </td>
+          <td class="hide-sm">
+            <div class="bars">
+              {% for bar in row.bars %}
+              <span class="{{ bar.level }}" title="{{ bar.start.astimezone(tz).strftime('%H:00') }}: {{ '%.1f%%' % bar.uptime if bar.uptime is not none else 'no data' }}"></span>
+              {% endfor %}
+            </div>
+          </td>
+          <td class="num">{{ row.uptime_24h_label }}</td>
+          <td class="num">{{ row.uptime_7d_label }}</td>
+          <td class="num hide-sm">{{ row.latency }}</td>
+          <td class="num hide-sm">{{ row.last_check }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Recent outages</h2>
+  <div class="card">
+    {% if incidents %}
+    <table class="incidents">
+      <thead>
+        <tr><th>Device</th><th>Started</th><th class="num">Duration</th><th class="hide-sm">Problem</th></tr>
+      </thead>
+      <tbody>
+        {% for incident in incidents %}
+        <tr>
+          <td class="name">{{ incident.device }}</td>
+          <td>{{ incident.started_at.astimezone(tz).strftime('%d %b %H:%M') }}</td>
+          <td class="num">
+            {% if incident.ended_at %}{{ format_duration(incident.ended_at - incident.started_at) }}{% else %}<span class="problem">ongoing</span>{% endif %}
+          </td>
+          <td class="hide-sm sub">{{ incident.problems }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty">No outages recorded yet.</div>
+    {% endif %}
+  </div>
+</div>

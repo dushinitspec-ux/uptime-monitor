@@ -1,0 +1,20 @@
+services:
+  monitor:
+    build: .
+    env_file: .env
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - uptime-data:/app/data
+      # Edit devices.yaml on the host and restart the container; no rebuild needed.
+      - ./devices.yaml:/app/devices.yaml:ro
+    restart: unless-stopped
+    # On a Linux server you can use the host network instead, so the container sees the
+    # LAN exactly like the host does (then remove "ports" above):
+    # network_mode: host
+
+volumes:
+  uptime-data:

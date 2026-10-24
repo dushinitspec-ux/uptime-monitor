@@ -1,0 +1,30 @@
+# Devices to watch. Edit for your network and restart the monitor.
+#
+#   name   shown on the status page and in alerts (must be unique)
+#   ip     IP address or host name
+#   ping   ICMP ping check (default: true)
+#   ports  TCP ports that must accept a connection
+#
+# A device is UP when every check passes. Examples of useful ports:
+# 80/443 web admin page, 554 RTSP (IP cameras), 22 SSH, 3389 RDP, 9100 printers.
+
+devices:
+  - name: Office router
+    ip: 192.168.1.1
+    ports: [80]
+
+  - name: Lobby camera
+    ip: 192.168.1.20
+    ports: [554]
+
+  - name: Wi-Fi access point, floor 2
+    ip: 192.168.1.31
+
+  - name: Reception printer
+    ip: 192.168.1.40
+    ping: false
+    ports: [9100]
+
+  - name: Internet (Cloudflare DNS)
+    ip: 1.1.1.1
+    ports: [53]
