@@ -4,14 +4,21 @@ Timestamps are ISO 8601 strings in UTC with a fixed format, so string order is t
 and the first 13 characters ("2026-10-24T09") are the hour - handy for hourly buckets.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-
-import aiosqlite
+from typing import TYPE_CHECKING
 
 from app.checks import CheckResult
 from app.state import DeviceState, Status
+
+# The SQLite driver is imported when a database is opened, not here, so the plain data
+# classes below (Incident, Counts) also load where it is missing: the in-browser demo
+# (app/web_demo.py) uses them with an in-memory store.
+if TYPE_CHECKING:
+    import aiosqlite
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS checks (
@@ -74,7 +81,9 @@ class Repository:
         self._db = conn
 
     @classmethod
-    async def connect(cls, path: Path | str) -> "Repository":
+    async def connect(cls, path: Path | str) -> Repository:
+        import aiosqlite
+
         if str(path) != ":memory:":
             Path(path).parent.mkdir(parents=True, exist_ok=True)
         conn = await aiosqlite.connect(path)

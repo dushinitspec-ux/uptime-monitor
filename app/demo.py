@@ -26,6 +26,12 @@ def failure_rate(device: Device) -> float:
     return next((rate for key, rate in FAILURE_RATES.items() if key in name), DEFAULT_FAILURE_RATE)
 
 
+def outage_problems(device: Device) -> tuple[str, ...]:
+    """What the checks report for a device that is switched off or unplugged."""
+    ping = ["ping: no reply"] if device.ping else []
+    return tuple(ping + [f"tcp/{port}: timed out" for port in device.ports])
+
+
 class FakeChecker:
     def __init__(
         self, devices: list[Device], rng: random.Random, failure_multiplier: float = 1.0
@@ -41,10 +47,7 @@ class FakeChecker:
             self._down[device.name] = self._rng.random() < failure_rate(device) * self._multiplier
 
         if self._down[device.name]:
-            problems = (["ping: no reply"] if device.ping else []) + [
-                f"tcp/{port}: timed out" for port in device.ports
-            ]
-            return CheckResult(device.name, False, at, None, tuple(problems))
+            return CheckResult(device.name, False, at, None, outage_problems(device))
         latency = (
             self._rng.uniform(8, 40)
             if "wi-fi" in device.name.lower()

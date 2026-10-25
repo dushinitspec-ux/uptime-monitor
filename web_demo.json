@@ -1,0 +1,21 @@
+{
+  "slug": "uptime-monitor",
+  "entry": "app.web_demo",
+  "packages": ["pydantic", "pyyaml"],
+  "micropip": [],
+  "files": [
+    "app/__init__.py",
+    "app/checks.py",
+    "app/db.py",
+    "app/demo.py",
+    "app/devices.py",
+    "app/messages.py",
+    "app/monitor.py",
+    "app/notifier.py",
+    "app/state.py",
+    "app/uptime.py",
+    "app/view.py",
+    "app/web_demo.py",
+    "devices.demo.yaml"
+  ]
+}

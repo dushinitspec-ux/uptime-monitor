@@ -1,8 +1,13 @@
 """Where alerts go: a Telegram chat, or the console when no bot is configured."""
 
-from typing import Protocol
+from __future__ import annotations
 
-from aiogram import Bot
+from typing import TYPE_CHECKING, Protocol
+
+# Type hint only: the Notifier protocol is also used by the in-browser demo, which has no
+# Telegram library.
+if TYPE_CHECKING:
+    from aiogram import Bot
 
 
 class Notifier(Protocol):
