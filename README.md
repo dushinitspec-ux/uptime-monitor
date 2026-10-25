@@ -1,5 +1,9 @@
 # Uptime Monitor
 
+[![CI](https://github.com/dushinitspec-ux/uptime-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/dushinitspec-ux/uptime-monitor/actions/workflows/ci.yml)
+
+**[▶ Live demo in your browser](https://site-production-898c.up.railway.app/en/projects/uptime-monitor/demo)** · [Case study](https://site-production-898c.up.railway.app/en/projects/uptime-monitor) · Part of [Daniil Dushin's portfolio](https://github.com/dushinitspec-ux/portfolio-daniil)
+
 Watches routers, IP cameras, Wi-Fi access points and printers. Sends a Telegram alert when
 one goes down and again when it comes back, with the downtime. A small status page shows the
 uptime of every device for the last 24 hours and 7 days.
